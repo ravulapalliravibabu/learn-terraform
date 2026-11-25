@@ -1,21 +1,20 @@
-resource "aws_instance" "web" {
-  instance_type = "t3.micro"
-  ami = "ami-0055977a6e828a4f4"
-  vpc_security_group_ids = [aws_security_group.web.id]
+resource "aws_instance" "mongodb" {
+  instance_type = var.instance_type
+  ami = var.ami_id
+  vpc_security_group_ids = [aws_security_group.mongodb.id]
 
-  tags = {
-    Name = "roboshop-web" 
-  }
+  tags = var.ec2_tags
+   
 }
 
-resource "aws_security_group" "web" {
-  name        = "web"
+resource "aws_security_group" "mongodb" {
+  name        = "mongodb"
   description = "Allow TLS inbound traffic and all outbound traffic"
   
 
 
   ingress {
-    from_port       = 0
+    from_port       = var.from_port
     to_port         = 0
     protocol        = "-1"
   }
@@ -24,12 +23,12 @@ resource "aws_security_group" "web" {
     from_port       = 0
     to_port         = 0
     protocol        = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = var.cidr
   }
 
   tags ={
 
-    Name  = "roboshop-web"
+    Name  = "roboshop-mongodb"
 
   }
 }
